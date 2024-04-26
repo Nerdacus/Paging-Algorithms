@@ -33,4 +33,4 @@ OPT (Belady's Optimal)
 This algorithm replaces the page that will not be used for the longest time in the future when a page fault occurs.
 
 License
-This program is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the [MIT License](LICENSE).
