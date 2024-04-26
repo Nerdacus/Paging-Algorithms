@@ -19,6 +19,7 @@ The program will display the address stream and simulate each paging algorithm, 
 Usage
 $ gcc -o paging paging.c
 $ ./paging
+
 Input File Format
 The input file should contain a list of memory addresses separated by whitespace (e.g., newline or space).
 
