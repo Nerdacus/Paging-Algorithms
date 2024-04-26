@@ -30,13 +30,14 @@ Input File Format
 The input file should contain a list of memory addresses separated by whitespace (e.g., newline or space).
 
 Paging Algorithms
-FIFO (First-In-First-Out)
+
+FIFO (First-In-First-Out) -
 This algorithm replaces the oldest page in memory when a page fault occurs.
 
-LRU (Least Recently Used)
+LRU (Least Recently Used) -
 This algorithm replaces the least recently used page in memory when a page fault occurs.
 
-OPT (Belady's Optimal)
+OPT (Belady's Optimal) -
 This algorithm replaces the page that will not be used for the longest time in the future when a page fault occurs.
 
 License
