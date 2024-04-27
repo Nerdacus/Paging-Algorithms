@@ -1,14 +1,11 @@
 #include <stdio.h>
 
-/* Logical defines. */
 #define TRUE 1
 #define FALSE 0
 
-/* Page defines. */
 #define PAGE_SIZE 100
 #define MAX_FRAMES 5
 
-/* Paging algorithm modes. */
 #define FIFO 1
 #define LRU 2
 #define OPT 3
@@ -35,29 +32,24 @@ int getIndexOfBeladyPage(int nFrames, int numAdds);
 int main(void) {
     int numAdds;
     int pageFaults;
-
-    /* Send message to user. */
+    
     printf("Hello TV Land! \n");
-
-    /* Read the incoming address stream from the input file. */
     numAdds = readAddressStream("address.txt");
     printf("numAdds = %d \n", numAdds);
-
-    /* Show the addresses to the user. */
     showAdds(numAdds);
 
-    /* Implement the FIFO page replacement algorithm. */
+    /* FIFO Algorithm */
     printf("Page replacement (FIFO) \n");
     pageFaults = pageReplace(numAdds, FIFO);
     printf("pageFaults (FIFO) = %d \n", pageFaults);
 
-    /* Implement the LRU page replacement algorithm. */
+    /* LRU Algorithm */
     printf("\n");
     printf("Page replacement (LRU) \n");
     pageFaults = pageReplace(numAdds, LRU);
     printf("pageFaults (LRU) = %d \n", pageFaults);
 
-    /* Implement Belady's page replacement algorithm. */
+    /* Belady's Algorithm */
     printf("\n");
     printf("Page replacement (Belady's OPT) \n");
     pageFaults = pageReplace(numAdds, OPT);
@@ -95,58 +87,44 @@ int pageReplace(int numAdds, int mode) {
     int repFrame;
     int pageFaults = 0;
 
-    /* Initialize variables. */
     nFrames = 0;
 
-    /* For each address in the incoming address stream, manage the page table. */
     for (j = 0; j < numAdds; j++) {
-        /* Calculate page and offset. */
         pageNum = adds[j] / PAGE_SIZE;
         offset = adds[j] % PAGE_SIZE;
 
-        /* Search frame table to see if page is present in memory. */
         frameNum = searchFrameTable(pageNum, nFrames);
 
-        /* If the page is not found in the page table, add it. */
         if (frameNum == -1) {
-            /* If there is room in the table, add the frame. */
             if (nFrames < MAX_FRAMES) {
                 frames[nFrames].pageNum = pageNum;
                 frames[nFrames].usage = 1;
                 frames[nFrames].lastUsed = j;
                 nFrames++;
             } else {
-                /* Page fault. */
                 pageFaults++;
 
                 switch (mode) {
                     case FIFO:
-                        /* Find oldest frame. */
                         repFrame = getIndexOfOldestPage(nFrames);
                         break;
                     case LRU:
-                        /* Find the least recently used frame. */
                         repFrame = getIndexOfLRUPage(nFrames);
                         break;
                     case OPT:
-                        /* Find the frame used furthest in the future. */
                         repFrame = getIndexOfBeladyPage(nFrames, numAdds);
                         break;
                 }
 
-                /* Replace the frame. */
                 frames[repFrame].pageNum = pageNum;
                 frames[repFrame].usage = 1;
                 frames[repFrame].lastUsed = j;
             }
         } else {
-            /* Frame was found in the table. */
-            /* Update the usage count and last time used. */
             frames[frameNum].usage++;
             frames[frameNum].lastUsed = j;
         }
 
-        /* Show the frame table to the user. */
         showFrameTable(nFrames);
     }
 
@@ -198,7 +176,7 @@ int getIndexOfBeladyPage(int nFrames, int numAdds) {
     for (j = 0; j < nFrames; j++) {
         int k;
         int future = 0;
-        for (k = 0; k < numAdds; k++) {  // Iterate over the address stream
+        for (k = 0; k < numAdds; k++) {
             if (frames[j].pageNum == adds[k] / PAGE_SIZE) {
                 future = k;
                 break;
